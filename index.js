@@ -9,21 +9,15 @@ import productRoutes from"./src/routes/index.js"
 import orderRoutes from"./src/routes/index.js"
 import inrolledUser from"./src/routes/index.js"
 const app = express();
-// app.use(cors({ origin: '*' }));
-
-// app.options('/register', cors());
-// app.use(cors({
-//   origin: ["http://localhost:5173", "http://localhost:3000/api/v1/register"],
-//   methods: ["GET", "POST", "PUT", "DELETE"],
-//   allowedHeaders: ['Content-Type', 'Authorization'],
-//   credentials: true,
-// }));
-const corsOptions = {
-  origin: "*",
+ app.use(cors({ origin: '*' }));
+ const corsOptions = {
+  origin: ["https://frontend-project-1-three.vercel.app", "https://hackathon-sage-nine.vercel.app"], // ✅ Frontend URLs
   methods: ["GET", "POST", "PUT", "DELETE"],
-  optionsSuccessStatus: 200,
+  allowedHeaders: ["Content-Type", "Authorization"],
+  credentials: true,
 };
 app.use(cors(corsOptions));
+
 
 app.use(express.json());
 app.use(cookieParser());
