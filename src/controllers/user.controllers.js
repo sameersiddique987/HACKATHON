@@ -40,8 +40,10 @@ const generateRefreshToken = (user) => {
 // register user
 
 const registerUser = async (req, res) => {
-  const { email, password } = req.body;
+  const {firstname,lastname, email, password } = req.body;
 
+  if (!firstname) return res.status(400).json({ message: "firstname required" });
+  if (!lastname) return res.status(400).json({ message: "lastname required" });
   if (!email) return res.status(400).json({ message: "email required" });
   if (!password) return res.status(400).json({ message: "password required" });
 
@@ -49,6 +51,8 @@ const registerUser = async (req, res) => {
   if (user) return res.status(401).json({ message: "user already exist" });
 
   const createUser = await User.create({
+    firstname,
+    lastname,
     email,
     password,
   });
@@ -75,7 +79,7 @@ const loginUser = async (req, res) => {
   const refreshToken = generateRefreshToken(user);
 
   // cookies
-  res.cookie("refreshToken", refreshToken, { http: true, secure: false });
+  res.cookie("refreshToken", refreshToken, { http: true,  });
 
   res.json({
     message: "user loggedIn successfully",

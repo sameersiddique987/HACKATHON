@@ -2,6 +2,16 @@ import mongoose from "mongoose";
 import bcrypt from "bcrypt";
 
 const userSchema = new mongoose.Schema({
+  firstname: {
+    type: String,
+    required: [true, "Firstname is required"],
+    unique: true,
+  },
+  lastname: {
+    type: String,
+    required: [true, "Lastname is required"],
+    unique: true,
+  },
   email: {
     type: String,
     required: [true, "email is required"],
@@ -11,18 +21,18 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: [true, "password is required"],
   },
-  products: [
-    {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Product",
-    },
-  ],
-  orders: [
-    {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Order",
-    },
-  ],
+  // products: [
+  //   {
+  //     type: mongoose.Schema.Types.ObjectId,
+  //     ref: "Product",
+  //   },
+  // ],
+  // orders: [
+  //   {
+  //     type: mongoose.Schema.Types.ObjectId,
+  //     ref: "Order",
+  //   },
+  // ],
 });
 
 userSchema.pre("save", async function (next) {

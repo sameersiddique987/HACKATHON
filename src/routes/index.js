@@ -6,7 +6,7 @@ import {
   registerUser,
   uploadImage,
 } from"../controllers/user.controllers.js";
-import { upload } from "../middlewere/multer.middlewere.js";
+import upload from "../middlewere/multer.middlewere.js"
 import { deleteUser, getUserById, getuserOrders, getUserProducts, updateUser } from "../controllers/inrollUser.js";
 
 const router = express.Router();
