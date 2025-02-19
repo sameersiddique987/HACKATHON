@@ -5,30 +5,27 @@ const userSchema = new mongoose.Schema({
   firstname: {
     type: String,
     required: [true, "Firstname is required"],
-    unique: true,
   },
   lastname: {
     type: String,
     required: [true, "Lastname is required"],
-    unique: true,
   },
   email: {
     type: String,
-    required: [true, "email is required"],
-    unique: true,
+    required: [true, "Email is required"],
+    unique: true, // ✅ Email کو unique رکھنا صحیح ہے
   },
   password: {
     type: String,
-    required: [true, "password is required"],
+    required: [true, "Password is required"],
   },
-
 });
 
+// **Password Hashing Middleware**
 userSchema.pre("save", async function (next) {
   if (!this.isModified("password")) return next();
-
   this.password = await bcrypt.hash(this.password, 10);
   next();
 });
 
-export default mongoose.model("Users", userSchema);
+export default mongoose.model("User", userSchema);

@@ -37,14 +37,18 @@ const uploadImageToCloudinary = async (localpath) => {
 
 // register user
 const registerUser = async (req ,res )=>{
-    const {email, password} = req.body;
+    const {firstname, lastname,email, password} = req.body;
+    if (!firstname) return res.status(400).json({message:"firstname is requird"})
+    if (!lastname) return res.status(400).json({message:"lastname is requird"})
     if (!email) return res.status(400).json({message:"email is requird"})
     if (!password) return res.status(401).json({message:"password is requird"})
 
-        const user = await User.findOne({email,email})
+        const user = await User.findOne({email,password})
         if(user) return res.status(401).json({message:"user already exist"})
 
         const createuser = await User.create({
+            lastname,
+            firstname,
             email,
             password
         })
