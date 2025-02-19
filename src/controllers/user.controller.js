@@ -57,31 +57,68 @@ const registerUser = async (req ,res )=>{
 
 // login user
 
-const loginUser = async (req , res)=>{
-const {email , password} = req.body
-if(!email) return res.status(400).json({message:"email is required"})
-if(!password) return res.status(400).json({message:"password is required"})
-const user = await User.findOne({email})
-if(!user)return res.status(401).json({message:"user not found"})
+// const loginUser = async (req , res)=>{
+// const {email , password} = req.body
+// if(!email) return res.status(400).json({message:"email is required"})
+// if(!password) return res.status(400).json({message:"password is required"})
+// const user = await User.findOne({email})
+// if(!user)return res.status(401).json({message:"user not found"})
 
-    // password compare krwayenga bcrypt
+//     // password compare krwayenga bcrypt
+//   const isPasswordValid = await bcrypt.compare(password, user.password);
+//   if (!isPasswordValid)
+//     return res.status(400).json({ message: "incorrect password" });
+//     // token generate
+//     const accessToken = generateaccesstoken(user)
+//     const refreshToken = generaterefreshtoken(user)
+
+//     res.cookie("refreshToken" , refreshToken , {http : true , secure : true})
+
+//     res.json({
+//         message : "LogedIn successfully",
+//         accessToken,
+//         refreshToken,
+//         data : user
+
+//     })
+// }
+
+const loginUser = async (req, res) => {
+  const { email, password } = req.body;
+
+  if (!email) return res.status(400).json({ message: "Email is required" });
+  if (!password) return res.status(400).json({ message: "Password is required" });
+
+  const user = await User.findOne({ email });
+  if (!user) return res.status(401).json({ message: "User not found" });
+
+  // Password compare using bcrypt
   const isPasswordValid = await bcrypt.compare(password, user.password);
-  if (!isPasswordValid)
-    return res.status(400).json({ message: "incorrect password" });
-    // token generate
-    const accessToken = generateaccesstoken(user)
-    const refreshToken = generaterefreshtoken(user)
+  if (!isPasswordValid) return res.status(400).json({ message: "Incorrect password" });
 
-    res.cookie("refreshToken" , refreshToken , {http : true , secure : true})
+  // Generate tokens
+  const accessToken = generateaccesstoken(user);
+  const refreshToken = generaterefreshtoken(user);
 
-    res.json({
-        message : "LogedIn successfully",
-        accessToken,
-        refreshToken,
-        data : user
+  // ✅ Fix Cookie settings
+  res.cookie("refreshToken", refreshToken, {
+    httpOnly: true, // ✅ Prevents JavaScript access
+    secure: process.env.NODE_ENV === "production", // ✅ Secure only in production
+    sameSite: "None", // ✅ Required for cross-origin requests
+  });
 
-    })
-}
+  // ✅ Don't send refreshToken in JSON response
+  res.json({
+    message: "Logged in successfully",
+    accessToken,
+    user: {
+      id: user._id,
+      email: user.email,
+      name: user.name, // Include only necessary user data
+    },
+  });
+};
+
 
 // refreshtoken
 const refreshToken = async (req , res) => {
