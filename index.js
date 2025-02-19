@@ -19,15 +19,15 @@ const allowedOrigins = [
 app.use(cors({
   origin: function (origin, callback) {
     if (!origin || allowedOrigins.includes(origin)) {
-      callback(null, origin); // ✅ Fix: `origin` return کریں, `"true"` نہیں
+      callback(null, origin); 
     } else {
       callback(new Error("Not allowed by CORS"));
     }
   },
-  credentials: true, // ✅ Allow Cookies & JWT
+  credentials: true,
 }));
 
-// ✅ Manually Set CORS Headers
+
 app.use((req, res, next) => {
   const origin = req.headers.origin;
   if (allowedOrigins.includes(origin)) {
@@ -39,15 +39,15 @@ app.use((req, res, next) => {
   next();
 });
 
-// ✅ Handle Preflight Requests
+
 app.options("*", (req, res) => {
   res.sendStatus(200);
 });
 
-// ✅ API Routes
+// API Routes
 app.use("/api/v1", routes);
 
-// ✅ Start Server
+
 connectDB()
   .then(() => {
     app.listen(process.env.PORT, () => {

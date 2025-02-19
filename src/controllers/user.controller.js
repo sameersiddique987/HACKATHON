@@ -74,21 +74,20 @@ const loginUser = async (req, res) => {
   const accessToken = generateaccesstoken(user);
   const refreshToken = generaterefreshtoken(user);
 
-  // ✅ Fix Cookie settings
+  //  Fix Cookie settings
   res.cookie("refreshToken", refreshToken, {
-    httpOnly: true, // ✅ Prevents JavaScript access
-    secure: false, // ✅ Secure only in production
-    sameSite: "None", // ✅ Required for cross-origin requests
+    httpOnly: true, 
+     secure: process.env.NODE_ENV === "production", 
+    sameSite: "None", 
   });
 
-  // ✅ Don't send refreshToken in JSON response
   res.json({
     message: "Logged in successfully",
     accessToken,
     user: {
       id: user._id,
       email: user.email,
-      name: user.name, // Include only necessary user data
+      name: user.name, 
     },
   });
 };
