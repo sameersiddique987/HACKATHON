@@ -15,21 +15,20 @@ const allowedOrigins = [
   "https://frontend-project-1-three.vercel.app"
 ];
 
+// ✅ CORS Middleware
 app.use(cors({
   origin: function (origin, callback) {
     if (!origin || allowedOrigins.includes(origin)) {
-      callback(null, origin); // ✅ Fix: Use origin instead of "true"
+      callback(null, origin); // ✅ Fix: `origin` return کریں, `"true"` نہیں
     } else {
       callback(new Error("Not allowed by CORS"));
     }
   },
-  credentials: true, // ✅ Allow cookies & tokens
-  methods: ["GET", "POST", "PUT", "DELETE"],
-  allowedHeaders: ["Content-Type", "Authorization"]
+  credentials: true, // ✅ Allow Cookies & JWT
 }));
 
-// ✅ Handle Preflight Requests Properly
-app.options("*", (req, res) => {
+// ✅ Manually Set CORS Headers
+app.use((req, res, next) => {
   const origin = req.headers.origin;
   if (allowedOrigins.includes(origin)) {
     res.setHeader("Access-Control-Allow-Origin", origin);
@@ -37,22 +36,24 @@ app.options("*", (req, res) => {
   res.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
   res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
   res.setHeader("Access-Control-Allow-Credentials", "true");
+  next();
+});
+
+// ✅ Handle Preflight Requests
+app.options("*", (req, res) => {
   res.sendStatus(200);
 });
 
-app.get("/", (req, res) => {
-  res.send("Hello World!");
-});
-
-// ✅ Secure Cookies (JWT Refresh Token)
+// ✅ API Routes
 app.use("/api/v1", routes);
 
+// ✅ Start Server
 connectDB()
   .then(() => {
     app.listen(process.env.PORT, () => {
-      console.log(`⚙️  Server is running at port : ${process.env.PORT}`);
+      console.log(`⚙️ Server running on port: ${process.env.PORT}`);
     });
   })
   .catch((err) => {
-    console.log("MONGO DB connection failed !!! ", err);
+    console.log("❌ MongoDB Connection Failed!", err);
   });
