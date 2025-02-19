@@ -4,10 +4,8 @@ import express from "express";
 import cookieParser from "cookie-parser";
 import cors from "cors";
 import connectDB from "./src/db/index.js";
-import userRoutes from "./src/routes/index.js";
-import productRoutes from"./src/routes/index.js"
-import orderRoutes from"./src/routes/index.js"
-import inrolledUser from"./src/routes/index.js"
+import routes from "./src/routes/user.index.js";
+
 const app = express();
 app.use(express.json());
 
@@ -49,10 +47,7 @@ app.get("/", (req, res) => {
 });
 
 // routes
-app.use("/api/v1", userRoutes);
-app.use("/api/v1/", productRoutes);
-app.use("/api/v1", orderRoutes);
-app.use("/api/v1", inrolledUser);
+app.use("/api/v1", routes);
 
 
 connectDB()

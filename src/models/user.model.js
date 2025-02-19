@@ -21,18 +21,7 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: [true, "password is required"],
   },
-  // products: [
-  //   {
-  //     type: mongoose.Schema.Types.ObjectId,
-  //     ref: "Product",
-  //   },
-  // ],
-  // orders: [
-  //   {
-  //     type: mongoose.Schema.Types.ObjectId,
-  //     ref: "Order",
-  //   },
-  // ],
+
 });
 
 userSchema.pre("save", async function (next) {
