@@ -57,32 +57,6 @@ const registerUser = async (req ,res )=>{
 
 // login user
 
-// const loginUser = async (req , res)=>{
-// const {email , password} = req.body
-// if(!email) return res.status(400).json({message:"email is required"})
-// if(!password) return res.status(400).json({message:"password is required"})
-// const user = await User.findOne({email})
-// if(!user)return res.status(401).json({message:"user not found"})
-
-//     // password compare krwayenga bcrypt
-//   const isPasswordValid = await bcrypt.compare(password, user.password);
-//   if (!isPasswordValid)
-//     return res.status(400).json({ message: "incorrect password" });
-//     // token generate
-//     const accessToken = generateaccesstoken(user)
-//     const refreshToken = generaterefreshtoken(user)
-
-//     res.cookie("refreshToken" , refreshToken , {http : true , secure : true})
-
-//     res.json({
-//         message : "LogedIn successfully",
-//         accessToken,
-//         refreshToken,
-//         data : user
-
-//     })
-// }
-
 const loginUser = async (req, res) => {
   const { email, password } = req.body;
 
@@ -103,7 +77,7 @@ const loginUser = async (req, res) => {
   // ✅ Fix Cookie settings
   res.cookie("refreshToken", refreshToken, {
     httpOnly: true, // ✅ Prevents JavaScript access
-    secure: process.env.NODE_ENV === "production", // ✅ Secure only in production
+    secure: false, // ✅ Secure only in production
     sameSite: "None", // ✅ Required for cross-origin requests
   });
 
