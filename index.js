@@ -10,9 +10,10 @@ const app = express();
 app.use(express.json());
 
 
+
 const allowedOrigins = [
-  'https://frontend-project-1-three.vercel.app', 
-  'http://localhost:5173' 
+  "http://localhost:5173",
+  "https://frontend-project-1-three.vercel.app"
 ];
 
 app.use(cors({
@@ -20,21 +21,19 @@ app.use(cors({
     if (!origin || allowedOrigins.includes(origin)) {
       callback(null, true);
     } else {
-      callback(new Error('CORS not allowed for this origin'));
+      callback(new Error("Not allowed by CORS"));
     }
   },
-  methods: ['GET', 'POST', 'PUT', 'DELETE'],
-  allowedHeaders: ['Content-Type', 'Authorization'],
-  credentials: true
+  methods: ["GET", "POST", "PUT", "DELETE"],
+  allowedHeaders: ["Content-Type", "Authorization"]
 }));
 
 
-app.options('*', (req, res) => {
-  res.setHeader("Access-Control-Allow-Origin", req.headers.origin);
-  res.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
-  res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
-  res.setHeader("Access-Control-Allow-Credentials", "true");
-  res.status(200).end();
+app.use((req, res, next) => {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE");
+  res.header("Access-Control-Allow-Headers", "Content-Type, Authorization");
+  next();
 });
 
 
