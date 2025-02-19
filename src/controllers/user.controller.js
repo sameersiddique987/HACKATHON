@@ -72,7 +72,7 @@ if(!user)return res.status(401).json({message:"user not found"})
     const accessToken = generateaccesstoken(user)
     const refreshToken = generaterefreshtoken(user)
 
-    res.cookie("refreshToken" , refreshToken , {http : true , secure : false})
+    res.cookie("refreshToken" , refreshToken , {http : true , secure : true})
 
     res.json({
         message : "LogedIn successfully",
