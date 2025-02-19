@@ -18,31 +18,33 @@ const allowedOrigins = [
 app.use(cors({
   origin: function (origin, callback) {
     if (!origin || allowedOrigins.includes(origin)) {
-      callback(null, true);
+      callback(null, origin); // ✅ Fix: Use origin instead of "true"
     } else {
       callback(new Error("Not allowed by CORS"));
     }
   },
-  credentials: true, 
+  credentials: true, // ✅ Allow cookies & tokens
+  methods: ["GET", "POST", "PUT", "DELETE"],
+  allowedHeaders: ["Content-Type", "Authorization"]
 }));
 
-// ✅ CORS Headers for all responses
-app.use((req, res, next) => {
+// ✅ Handle Preflight Requests Properly
+app.options("*", (req, res) => {
   const origin = req.headers.origin;
   if (allowedOrigins.includes(origin)) {
     res.setHeader("Access-Control-Allow-Origin", origin);
   }
-  res.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE");
+  res.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
   res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
   res.setHeader("Access-Control-Allow-Credentials", "true");
-  next();
+  res.sendStatus(200);
 });
 
 app.get("/", (req, res) => {
   res.send("Hello World!");
 });
 
-// routes
+// ✅ Secure Cookies (JWT Refresh Token)
 app.use("/api/v1", routes);
 
 connectDB()
