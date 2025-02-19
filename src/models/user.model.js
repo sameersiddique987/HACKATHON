@@ -13,13 +13,15 @@ const userSchema = new mongoose.Schema({
   email: {
     type: String,
     required: [true, "Email is required"],
-    unique: true, // ✅ Email کو unique رکھنا صحیح ہے
+    unique: true, 
   },
   password: {
     type: String,
     required: [true, "Password is required"],
   },
-});
+},
+{ timestamps: true }
+);
 
 // **Password Hashing Middleware**
 userSchema.pre("save", async function (next) {
